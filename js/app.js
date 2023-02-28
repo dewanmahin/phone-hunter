@@ -12,20 +12,30 @@ const displayPhones = phones => {
     console.log(phones);
     const phonesContainer = document.getElementById("phones-container");
     phonesContainer.textContent = ``;
-    phones.forEach(phone => {
-        const phoneDiv = document.createElement('div');
-        phoneDiv.classList.add('col');
-        phoneDiv.innerHTML = `
-        <div class="card">
-            <img src="${phone.image}" class="card-img-top mx-auto w-75" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">${phone.phone_name}</h5>
-                <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+    phones = phones.slice(0, 9);
+
+    // display warning message
+    const noPhone = document.getElementById('no-found-warning');
+    if(phones.length == 0){
+        noPhone.classList.remove('d-none');
+    }// display all phones
+    else{
+        noPhone.classList.add('d-none');
+        phones.forEach(phone => {
+            const phoneDiv = document.createElement('div');
+            phoneDiv.classList.add('col');
+            phoneDiv.innerHTML = `
+            <div class="card">
+                <img src="${phone.image}" class="card-img-top mx-auto w-75" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">${phone.phone_name}</h5>
+                    <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                </div>
             </div>
-        </div>
-        `
-        phonesContainer.appendChild(phoneDiv);
-    })
+            `
+            phonesContainer.appendChild(phoneDiv);
+        })
+    }
 }
 
 document.getElementById('btn-search').addEventListener('click', () => {

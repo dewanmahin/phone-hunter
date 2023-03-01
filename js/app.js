@@ -1,18 +1,25 @@
-const loadPhones = async(searchText) => {
+const loadPhones = async(searchText, dataLimit) => {
     const url = `https://openapi.programming-hero.com/api/phones?search=${searchText}`
     const res = await fetch(url);
     const data = await res.json();
-    displayPhones(data.data);
+    displayPhones(data.data, dataLimit);
     /* fetch(url)
         .then(res => res.json())
         .then(data => console.log(data)) */
 }
 
-const displayPhones = phones => {
+const displayPhones = (phones, dataLimit) => {
     console.log(phones);
     const phonesContainer = document.getElementById("phones-container");
     phonesContainer.textContent = ``;
-    phones = phones.slice(0, 3);
+    // Display 10 phones only
+    const showAll = document.getElementById('show-all');
+    if(dataLimit && phones.length > 10){
+        phones = phones.slice(0, 10);
+        showAll.classList.remove('d-none');
+    }else{
+        showAll.classList.add('d-none');
+    }
 
     // display warning message
     const noPhone = document.getElementById('no-found-warning');
@@ -40,12 +47,17 @@ const displayPhones = phones => {
     }
 }
 
-document.getElementById('btn-search').addEventListener('click', () => {
+const processSearch = (dataLimit) => {
     toggleSpinner(true); // start spinning
     const searchInput = document.getElementById('searchField');
     const searchText = searchInput.value;
-    loadPhones(searchText);
-    searchInput.value = '';
+    loadPhones(searchText, dataLimit);
+    // searchInput.value = '';
+}
+
+// handle search button click
+document.getElementById('btn-search').addEventListener('click', () => {
+    processSearch(true);
 })
 // Spinner toggle using function
 const toggleSpinner = isLoading => {
@@ -56,3 +68,8 @@ const toggleSpinner = isLoading => {
         spinningSection.classList.add('d-none');
     }
 }
+
+// not the best practice but for learning doing in this way
+document.getElementById('btn-show-all').addEventListener('click', () => {
+    processSearch(false);
+})

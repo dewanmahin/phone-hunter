@@ -9,7 +9,7 @@ const loadPhones = async(searchText, dataLimit) => {
 }
 
 const displayPhones = (phones, dataLimit) => {
-    console.log(phones);
+    // console.log(phones);
     const phonesContainer = document.getElementById("phones-container");
     phonesContainer.textContent = ``;
     // Display 10 phones only
@@ -88,5 +88,17 @@ const loadPhoneDetails = async id => {
     const url = `https://openapi.programming-hero.com/api/phone/${id}`
     const res = await fetch(url);
     const data = await res.json()
-    console.log(data.data);
+    displayPhoneDetails(data.data);
+}
+
+const displayPhoneDetails = phone => {
+    console.log(phone);
+    const modalTitle = document.getElementById('phoneDetailModalLabel');
+    modalTitle.innerText = phone.name;
+    const modalBody = document.getElementById('modalBody');
+    modalBody.innerHTML = `
+        <p>Release Date: ${phone.releaseDate ? phone.releaseDate : 'No Release Date Found'}</p>
+        <p>Display Size: ${phone.mainFeatures.displaySize ? phone.mainFeatures.displaySize : 'No Information Found'}</p>
+        <p>Storage: ${phone.mainFeatures.storage ? phone.mainFeatures.storage : 'No Information Found'}</p>
+    `
 }
